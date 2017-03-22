@@ -82,6 +82,14 @@ class XmlDriverTest extends BaseDriverTest
         $this->assertEquals($p, $m->propertyMetadata['name']);
     }
 
+    public function testGroupsTrim()
+    {
+        $first = $this->getDriver()->loadMetadataForClass(new \ReflectionClass('JMS\Serializer\Tests\Fixtures\DeepGroupsFormat'));
+
+        $this->assertArrayHasKey('price', $first->propertyMetadata);
+        $this->assertArraySubset(['first.test.group'], $first->propertyMetadata['price']->groups);
+    }
+
     protected function getDriver()
     {
         $append = '';

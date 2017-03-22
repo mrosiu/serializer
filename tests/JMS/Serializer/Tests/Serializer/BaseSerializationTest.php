@@ -29,6 +29,8 @@ use JMS\Serializer\Handler\PhpCollectionHandler;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Tests\Fixtures\AuthorExpressionAccess;
 use JMS\Serializer\Tests\Fixtures\DateTimeArraysObject;
+use JMS\Serializer\Tests\Fixtures\DeepGroupsFormat;
+use JMS\Serializer\Tests\Fixtures\DeepGroupsFormatChild;
 use JMS\Serializer\Tests\Fixtures\Discriminator\Car;
 use JMS\Serializer\Tests\Fixtures\Discriminator\Moped;
 use JMS\Serializer\Tests\Fixtures\Garage;
@@ -1281,6 +1283,12 @@ abstract class BaseSerializationTest extends \PHPUnit_Framework_TestCase
     {
         $object = new ObjectWithEmptyNullableAndEmptyArrays();
         $this->assertEquals($this->getContent('nullable_arrays'), $this->serializer->serialize($object, $this->getFormat()));
+    }
+
+    public function testNestedGroupsTrim()
+    {
+        $firstObject = new DeepGroupsFormat(new DeepGroupsFormatChild(5, 'EUR'));
+        $this->assertEquals($this->getContent('deep_groups_format'), $this->serialize($firstObject, SerializationContext::create()->setGroups('first.test.group')));
     }
 
     abstract protected function getContent($key);
